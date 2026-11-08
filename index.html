@@ -1047,7 +1047,11 @@ function build(d,it,mode,dir){
       answer:forms,say,extra:f.length>1?"Also correct: "+f.slice(1).join(", "):"",options:shuffle([{t:f[0],ok:true},...verbDistractors(D,it,which)])};
   }
   if(D.type==="vocab"){
-    const q=mode==="type"?{ask:"Write the word in English",prompt:it.bg,lang:"bg",sub:it.def,accept:[it.en],answer:it.en,say:it.en}
+    /* Write the word (08.11.2026): the example sentence usually contains the answer, so it comes only after the answer;
+       the Hint is the notebook one (first letter, number of letters) */
+    const first=cleanSay(it.en);
+    const q=mode==="type"?{ask:"Write the word in English",prompt:it.bg,lang:"bg",sub:"Starts with “"+first[0]+"”, "+first.replace(/[^a-z]/gi,"").length+" letters",subHidden:true,
+        accept:[it.en],answer:it.en,extra:it.def||"",say:it.en}
       :dir==="bg"?{ask:"How do you say it in English?",prompt:it.bg,lang:"bg",sub:it.def,subHidden:true,answer:it.en,extra:it.def,say:it.en,
         options:shuffle([{t:it.en,ok:true},...distractors(d,it,3,x=>({t:x.en}))])}
       :{ask:"What does it mean?",prompt:it.en,lang:"en",sayPrompt:it.en,answer:it.bg,extra:it.def,say:it.en,
